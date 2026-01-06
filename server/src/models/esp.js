@@ -3,26 +3,26 @@ class Esp{
         this.db = db;
     }
     async createAvgSensorQu(name, avg, potId){
-        let sql = "INSERT INTO sensors (sensor_name, val_avg, date, pot_id) VALUES (?,?,?,?);"//הגנה מאינג'קשן בעזרת סימני שאלה
+        let sql = "INSERT INTO sensors (sensor_name, val_avg, date, pot_id) VALUES (?,?,?,?);"
         return await this.db.execute(sql,[name,avg,new Date().toLocaleDateString("he-IL"),potId]);
     }
     async readAvgSensorQu(name){
         let sql = "SELECT * FROM sensors WHERE sensor_name = ?;";
         return await this.db.execute(sql, [name]);
     }
-    async readAvgDateQu(date){///////////////////////////////////////
+    async readAvgDateQu(date){
         let sql = "SELECT * FROM sensors WHERE date = ?;";
         return await this.db.execute(sql, [date]);
     }
-    async readAvgDateQu2(name, date){/////////////////////////////////////
+    async readAvgDateQu2(name, date){
         let sql = "SELECT AVG(value) AS avg FROM samples WHERE name = ? AND DATE(sample_date) = ?";
         let [rows] = await this.db.execute(sql, [name, date]);
-        return rows[0]; // מחזיר ממוצע אחד
+        return rows[0]; 
     };
     async readAvgByNameAndDate(name, date) {
     const sql = "SELECT AVG(value) AS avg_value, COUNT(*) AS total_samples FROM samples WHERE name = ? AND DATE(sample_date) = ?";
     const [rows] = await this.db.execute(sql, [name, date]);
-    return rows[0]; // מחזיר ממוצע + כמות בדיקות
+    return rows[0]; 
 }
 
     async readAvgPotQu(potId){
