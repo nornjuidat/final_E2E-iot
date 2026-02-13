@@ -9,7 +9,7 @@ const sensors = [
 
 const createAVGsensors = async (req,res) => {
     try{
-        const {name,val,id_pot}=req.body; // שומר את הבדיקות בבסיס הנתונים. אם היינו שומרים בשרת והשרת היה נופל אז היינו מאבדים את הבדיקות
+        const {name,val,id_pot}=req.body; 
         if((name!="temp" && val<=0) || (name=="" || id_pot<0)){
             return res.status(401).json({message:"one or more of the parameters are missing or wrong."});
         }
@@ -24,8 +24,7 @@ const createAVGsensors = async (req,res) => {
 const readAvgDate = async (req,res) => {
     try{
         const {name,date}=req.body;
-        //SELECT AVG(Price)
-        let data = await esp.readAvgDateQu(name,date); // לא טוב כי אמור להיות רק date בלי name
+        let data = await esp.readAvgDateQu(name,date); 
         console.log(data);
         return(res.status(201).json(data));
     } catch (error){
@@ -61,7 +60,7 @@ const readAvgDate2 = async (req, res) => {
 
 const readAvgPot = async (req,res) => {
     try{
-        const {name,val,id_pot}=req.body; // שומר את הבדיקות בבסיס הנתונים. אם היינו שומרים בשרת והשרת היה נופל אז היינו מאבדים את הבדיקות
+        const {name,val,id_pot}=req.body; 
         if((name!="temp" && val<=0) || (name=="" || id_pot<0)){
             return res.status(401).json({message:"one or more of the parameters are missing or wrong."});
         }
@@ -75,14 +74,11 @@ const readAvgPot = async (req,res) => {
 
 const deleteAvgSensor = async (req,res) => {
     try{
-        const {id_pot}=req.body; // שומר את הבדיקות בבסיס הנתונים. אם היינו שומרים בשרת והשרת היה נופל אז היינו מאבדים את הבדיקות
+        const {id_pot}=req.body; 
         if(!id_pot || id_pot <= 0){
             return res.status(400).json({message:"pot does not exist"});
         }
-        /*let data = await esp.deleteAvgPotQu(id_pot);
-        if (data.affectedRows === 0) {
-            return res.status(404).json({ message: "pot not found" });
-        }*/
+      
         let [result] = await esp.deleteAvgPotQu(id_pot);
 
         if (result.affectedRows === 0) {

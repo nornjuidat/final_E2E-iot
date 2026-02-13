@@ -1,30 +1,22 @@
 require("dotenv").config();
-const express = require("express");
-const morgan = require("morgan");
-const cors = require("cors");
-const path = require("path");
-const routes = require("./routes");
+const express = require('express');
+const morgan = require('morgan');
+const cors = require('cors');
+const path = require('path');
+const routes = require("./routes")
+require('./mqtt/client');
 
-const PORT = process.env.PORT || 3000;
-
-// Create an express app
+const port = process.env.pory || 3671;
 const app = express();
 
-
-
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirname,"../public"))); 
 app.use(express.json());
 
-// Log all requests
 app.use(morgan("dev"));
-
-// Enable CORS
 app.use(cors());
-
-// All routes
-app.use("/", routes);
+app.use("/",routes);
 
 
-app.listen(PORT, () => {
-  console.log(`The server is running on port: ${PORT}....`);
+app.listen(port, () => {            
+    console.log(`The server is running on port${port}....`);
 });
