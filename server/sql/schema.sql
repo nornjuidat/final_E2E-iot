@@ -1,0 +1,48 @@
+-- Smart Irrigation schema (MySQL)
+CREATE TABLE IF NOT EXISTS system_state (
+  id INT PRIMARY KEY DEFAULT 1,
+  mode VARCHAR(20) NOT NULL DEFAULT 'MANUAL',
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT IGNORE INTO system_state (id, mode) VALUES (1, 'MANUAL');
+
+CREATE TABLE IF NOT EXISTS settings (
+  id INT PRIMARY KEY DEFAULT 1,
+  soil_target INT NOT NULL DEFAULT 600,
+  soil_hysteresis INT NOT NULL DEFAULT 50,
+  light_threshold INT NOT NULL DEFAULT 2000,
+  manual_max_run_sec INT NOT NULL DEFAULT 1800,
+  weather_is_hot TINYINT(1) NOT NULL DEFAULT 1,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT IGNORE INTO settings (id) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS schedules (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  enabled TINYINT(1) NOT NULL DEFAULT 1,
+  day_of_week TINYINT NOT NULL, -- 0=Sun..6=Sat
+  start_time TIME NOT NULL,
+  duration_min INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS irrigation_logs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  mode VARCHAR(20) NOT NULL,
+  reason VARCHAR(50) NOT NULL,
+  start_time DATETIME NOT NULL,
+  end_time DATETIME NULL,
+  duration_sec INT NULL,
+  soil_at_start INT NULL,
+  light_at_start INT NULL
+);
+
+CREATE TABLE IF NOT EXISTS telemetry_samples (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  ts DATETIME NOT NULL,
+  soil INT NULL,
+  light INT NULL,
+  pump_state TINYINT(1) NULL
+);
